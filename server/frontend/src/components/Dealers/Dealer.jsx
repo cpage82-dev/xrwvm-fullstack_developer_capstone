@@ -37,19 +37,33 @@ const Dealer = () => {
   }
 
   const get_reviews = async ()=>{
+  console.log("Reviews URL:", reviews_url);
+  try {
     const res = await fetch(reviews_url, {
       method: "GET"
     });
+    console.log("Response status:", res.status);
     const retobj = await res.json();
+    console.log("Full response object:", retobj);
+    console.log("Response status:", retobj.status);
+    console.log("Reviews array:", retobj.reviews);
     
     if(retobj.status === 200) {
+      console.log("Status is 200");
       if(retobj.reviews.length > 0){
+        console.log("Found", retobj.reviews.length, "reviews");
         setReviews(retobj.reviews)
       } else {
+        console.log("No reviews found, setting unreviewed to true");
         setUnreviewed(true);
       }
+    } else {
+      console.log("Status is not 200:", retobj.status);
     }
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
   }
+}
 
   const senti_icon = (sentiment)=>{
     let icon = sentiment === "positive"?positive_icon:sentiment==="negative"?negative_icon:neutral_icon;
